@@ -100,4 +100,29 @@ export const formsController = {
       next(err);
     }
   },
+
+  async delete(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { formId } = req.params;
+
+      if (!formId) {
+        return res
+          .status(400)
+          .json({ success: false, message: "formId or slug is required" });
+      }
+
+      const result = await formsService.deleteForm(formId);
+
+      res.status(200).json({
+        success: true,
+        message: "Form and all associated submissions deleted successfully",
+        data: { formId: result.formId },
+      });
+    } catch (err: any) {
+      if (err.message === "Form not found") {
+        return res.status(404).json({ success: false, message: err.message });
+      }
+      next(err);
+    }
+  },
 };

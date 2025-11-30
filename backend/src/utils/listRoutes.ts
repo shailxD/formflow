@@ -34,6 +34,11 @@ export function getRoutes(app: Express | Router): any[] {
       methods: ["POST"],
       description: "Create or update form (upsert)",
     },
+    {
+      path: "/api/form-schema/:formId",
+      methods: ["DELETE"],
+      description: "Delete form and all its submissions",
+    },
     // Submissions
     {
       path: "/api/submissions",

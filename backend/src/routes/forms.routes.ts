@@ -12,4 +12,7 @@ formsRoutes.get("/", formsController.getAll);
 // Get form by ID
 formsRoutes.get("/:formId", formsController.getById);
 
+// Delete form by ID or slug (also deletes all submissions)
+formsRoutes.delete("/:formId", formsController.delete);
+
 export default formsRoutes;

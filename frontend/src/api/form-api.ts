@@ -2,6 +2,7 @@ import apiClient from '@/lib/api-client'
 import type {
   SaveFormRequest,
   SaveFormResponse,
+  DeleteFormResponse,
   GetFormsResponse,
   GetFormBySlugResponse,
   SubmitFormRequest,
@@ -52,6 +53,13 @@ export const getSubmissions = async (
   const response = await apiClient.get<GetSubmissionsResponse>(
     `/api/submissions/${formId}`,
     { params },
+  )
+  return response.data
+}
+
+export const deleteForm = async (formId: string): Promise<DeleteFormResponse> => {
+  const response = await apiClient.delete<DeleteFormResponse>(
+    `/api/form-schema/${formId}`,
   )
   return response.data
 }

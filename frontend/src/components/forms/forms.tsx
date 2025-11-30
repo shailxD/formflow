@@ -10,8 +10,19 @@ import {
   Share2,
   Trash2,
 } from 'lucide-react'
+import { toast } from 'sonner'
 import { v4 as uuidv4 } from 'uuid'
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +35,7 @@ import {
   InputGroupInput,
 } from '@/components/ui/input-group'
 import { Spinner } from '@/components/ui/spinner'
+import { useDeleteForm } from '@/hooks/mutations/use-form-mutation'
 import { useForms } from '@/hooks/queries/use-forms'
 import useFormBuilderStore from '@/store/form-builder-store'
 import { Button } from '../ui/button'
@@ -80,6 +92,8 @@ function FormCard({
   isPublished,
 }: FormCardProps) {
   const navigate = useNavigate()
+  const deleteFormMutation = useDeleteForm()
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const handleClick = () => {
     navigate({ to: `/form/${formId}` })
@@ -90,16 +104,50 @@ function FormCard({
     window.open(url, '_blank')
   }
 
+  const handleDeleteForm = () => {
+    deleteFormMutation.mutate(formId, {
+      onSuccess: () => {
+        toast.success('Form deleted successfully')
+        setShowDeleteDialog(false)
+      },
+      onError: () => {
+        toast.error('Failed to delete form')
+      },
+    })
+  }
+
   // TODO: Implement these handlers for dropdown menu options
   // const handleEditForm = () => {}
   // const handleShareForm = () => {}
-  // const handleDeleteForm = () => {}
 
   return (
-    <button
-      onClick={handleClick}
-      className="flex h-32 cursor-pointer flex-col justify-between rounded-lg border bg-card p-4 text-left transition-colors hover:bg-accent"
-    >
+    <>
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Form</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this form? This will also delete
+              all submissions. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteForm}
+              disabled={deleteFormMutation.isPending}
+              className="bg-destructive text-white hover:bg-destructive/90"
+            >
+              {deleteFormMutation.isPending ? 'Deleting...' : 'Delete'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <button
+        onClick={handleClick}
+        className="flex h-32 cursor-pointer flex-col justify-between rounded-lg border bg-card p-4 text-left transition-colors hover:bg-accent"
+      >
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-2">
           <h3 className="leading-tight font-medium">{title}</h3>
@@ -132,7 +180,7 @@ function FormCard({
               Share Form
             </DropdownMenuItem>
             <DropdownMenuItem
-              disabled
+              onClick={() => setShowDeleteDialog(true)}
               className="text-destructive focus:text-destructive"
             >
               <Trash2 className="size-4" />
@@ -159,6 +207,7 @@ function FormCard({
         )}
       </div>
     </button>
+    </>
   )
 }
 

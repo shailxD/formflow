@@ -1,5 +1,5 @@
 import { db } from "../db";
-import { formsTable, NewForm } from "../db/schema";
+import { formsTable, submissionsTable, NewForm } from "../db/schema";
 import { eq, or } from "drizzle-orm";
 
 const VALID_TYPES = new Set([
@@ -106,5 +106,28 @@ export const formsService = {
   async getAllForms() {
     const forms = await db.select().from(formsTable).all();
     return forms;
+  },
+
+  async deleteForm(idOrSlug: string) {
+    // Find the form by id or slug
+    const form = await db
+      .select()
+      .from(formsTable)
+      .where(or(eq(formsTable.id, idOrSlug), eq(formsTable.slug, idOrSlug)))
+      .get();
+
+    if (!form) {
+      throw new Error("Form not found");
+    }
+
+    // Delete all submissions for this form first
+    await db
+      .delete(submissionsTable)
+      .where(eq(submissionsTable.formId, form.id));
+
+    // Delete the form
+    await db.delete(formsTable).where(eq(formsTable.id, form.id));
+
+    return { formId: form.id };
   },
 };

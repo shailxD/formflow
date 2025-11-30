@@ -41,6 +41,14 @@ export interface SaveFormResponse {
   }
 }
 
+export interface DeleteFormResponse {
+  success: boolean
+  message: string
+  data: {
+    formId: string
+  }
+}
+
 export interface SubmitFormRequest {
   data: Record<string, any>
 }
