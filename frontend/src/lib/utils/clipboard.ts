@@ -50,7 +50,11 @@ export async function copyToClipboard(
     }
   }
 
-  return fallbackCopyToClipboard(text, options)
+  const result = fallbackCopyToClipboard(text, options)
+  if (!result && showErrorToast) {
+    toast.error(errorMessage)
+  }
+  return result
 }
 
 function fallbackCopyToClipboard(
