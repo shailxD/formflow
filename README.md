@@ -2,6 +2,16 @@
 
 A full-stack dynamic form builder system with a React frontend and Node.js backend.
 
+## 🔗 Live Demo & Deployment
+
+|                   | Link                                                                             |
+| ----------------- | -------------------------------------------------------------------------------- |
+| 🎥 **Demo Video** | [Watch on Loom](https://www.loom.com/share/7e73a7e867174cfb82619620357e16c5)     |
+| 🌐 **Frontend**   | [formflow-teal.vercel.app](https://formflow-teal.vercel.app/)                    |
+| ⚙️ **Backend**    | [formflow-backend-b921.onrender.com](https://formflow-backend-b921.onrender.com) |
+
+---
+
 ## 🎯 Milestone Completion Status
 
 ### Milestone 1 — Frontend Development ✅
@@ -235,13 +245,6 @@ The frontend will run at `http://localhost:3000`
 3. JWT tokens are used for authentication with tokens stored client-side
 4. Server-side pagination and sorting are implemented for the submissions endpoint
 5. The "Employee Onboarding" form is seeded as the default form schema
-
----
-
-## 🔗 Deployment Links
-
-- **Frontend**: [Add your deployed frontend URL]
-- **Backend**: [Add your deployed backend URL]
 
 ---
 
