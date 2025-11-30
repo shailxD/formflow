@@ -38,8 +38,10 @@ function PublicFormContent({ slug }: { slug: string }) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center py-8">
-      <PublicForm form={data.data} slug={slug} />
+    <div className="h-screen overflow-y-auto">
+      <div className="flex min-h-full flex-col items-center py-8">
+        <PublicForm form={data.data} slug={slug} />
+      </div>
     </div>
   )
 }
